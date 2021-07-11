@@ -573,6 +573,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustversion"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61b3909d758bb75c79f23d4736fac9433868679d3ad2ea7a61e3c25cfda9a088"
+
+[[package]]
 name = "ryu"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -614,7 +620,10 @@ name = "seed-mt-test"
 version = "0.1.0"
 dependencies = [
  "seed",
+ "serde",
+ "serde_closure 0.3.2",
  "wasm-bindgen-test",
+ "wasm-mt",
  "wasm-mt-pool",
 ]
 
@@ -649,7 +658,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72ac0cf76e43f003c77b40e506a2dcf5ff86e28b9da31061d7a3bfe6f2a46667"
 dependencies = [
  "serde",
- "serde_closure_derive",
+ "serde_closure_derive 0.2.14",
+]
+
+[[package]]
+name = "serde_closure"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8dfcafdff09f246e0bca489d8dc841fa557debc1ced3ed7e619623cfe8795698"
+dependencies = [
+ "rustversion",
+ "serde",
+ "serde_closure_derive 0.3.2",
 ]
 
 [[package]]
@@ -657,6 +677,17 @@ name = "serde_closure_derive"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bafa9aff20ca4a0e92b36e2b8f0c3414ae79402267ee830cab95f8a9ab1d21f0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "serde_closure_derive"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e51569ae5ecb8561699059dbbf1181e13f59c042438552e56c6ddf794f84eb7c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -985,7 +1016,7 @@ dependencies = [
  "bincode",
  "js-sys",
  "serde",
- "serde_closure",
+ "serde_closure 0.2.14",
  "serde_traitobject",
  "uuid",
  "wasm-bindgen",

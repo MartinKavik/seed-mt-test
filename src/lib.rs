@@ -1,56 +1,49 @@
-// (Lines like the one below ignore selected Clippy rules
-//  - it's useful when you want to check your code with `cargo make verify`
-// but some rules are too "annoying" or are not applicable for your case.)
 #![allow(clippy::wildcard_imports)]
+#![feature(async_closure)]
 
 use seed::{prelude::*, *};
+use wasm_mt_pool::prelude::*;
+use wasm_mt::utils::{console_ln, sleep};
+use wasm_mt::prelude::*;
 
 // ------ ------
 //     Init
 // ------ ------
 
-// `init` describes what should happen when your app started.
-fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
-    Model { counter: 0 }
+fn init(_: Url, orders: &mut impl Orders<Msg>) -> Model {
+    orders.perform_cmd(async {
+        let pkg_js = "./pkg/package.js"; // path to `wasm-bindgen`'s JS binding
+        let mt = WasmMt::new(pkg_js).and_init().await.unwrap();
+
+        let th = mt.thread().and_init().await.unwrap();
+    });
+
+    Model
 }
 
 // ------ ------
 //     Model
 // ------ ------
 
-// `Model` describes our app state.
-struct Model {
-    counter: i32,
-}
+struct Model;
 
 // ------ ------
 //    Update
 // ------ ------
 
-// (Remove the line below once any of your `Msg` variants doesn't implement `Copy`.)
 #[derive(Copy, Clone)]
-// `Msg` describes the different events you can modify state with.
-enum Msg {
-    Increment,
-}
+enum Msg {}
 
-// `update` describes how to handle each `Msg`.
-fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
-    match msg {
-        Msg::Increment => model.counter += 1,
-    }
+fn update(_: Msg, _: &mut Model, _: &mut impl Orders<Msg>) {
 }
 
 // ------ ------
 //     View
 // ------ ------
 
-// `view` describes what to display.
-fn view(model: &Model) -> Node<Msg> {
+fn view(_: &Model) -> Node<Msg> {
     div![
-        "This is a counter: ",
-        C!["counter"],
-        button![model.counter, ev(Ev::Click, |_| Msg::Increment),],
+        "Seed MT test",
     ]
 }
 
@@ -58,9 +51,7 @@ fn view(model: &Model) -> Node<Msg> {
 //     Start
 // ------ ------
 
-// (This function is invoked by `init` function in `index.html`.)
 #[wasm_bindgen(start)]
 pub fn start() {
-    // Mount the `app` to the element with the `id` "app".
     App::start("app", init, update, view);
 }
