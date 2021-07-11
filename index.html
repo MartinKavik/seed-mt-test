@@ -10,9 +10,12 @@
 
 <body>
     <section id="app"></section>
-    <script type="module">
-        import init from '/pkg/package.js';
-        init('/pkg/package_bg.wasm');
+    <script src='./pkg/package.js'></script>
+    <script>
+        // We have to compile the app with `no-modules`,
+        // because no all browser workers support JS modules.
+        const {start} = wasm_bindgen;
+        wasm_bindgen('./pkg/package_bg.wasm').then(start);
     </script>
 </body>
 
